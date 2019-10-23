@@ -26,7 +26,6 @@ class Db(Utils):
             );
             ''')
         await self.db.commit()
-        self.db_products_lenght = await self.db_get_products_length()
 
     async def db_close(self):
         await self.db.close()
