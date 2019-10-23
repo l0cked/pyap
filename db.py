@@ -1,9 +1,8 @@
 from datetime import datetime
-from utils import Utils
 import aiosqlite
 
 
-class Db(Utils):
+class Db:
     async def db_init(self):
         self.db = await aiosqlite.connect('pyap.db')
         self.db.row_factory = self.db_dict_factory
