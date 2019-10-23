@@ -73,13 +73,13 @@ class Main(Proxy):
 
     async def start(self):
         await self.db_init()
-        # await self.proxy_clear()
-        # await self.proxy_update()
+        await self.proxy_clear()
+        await self.proxy_update()
         await self.proxy_init()
 
         self.sem = asyncio.Semaphore(100)
 
-        cities = [
+        locations = [
             'rossiya',
             'moskva',
             'odintsovo',
@@ -100,15 +100,15 @@ class Main(Proxy):
         ]
 
         urls = []
-        for city in cities:
+        for location in locations:
             for category in categories:
-                urls.append(f'https://m.avito.ru/{city}/{category}?sort=date')
+                urls.append(f'https://m.avito.ru/{location}/{category}?sort=date')
         async with aiohttp.ClientSession() as session:
             await asyncio.gather(*[self.getProductUrls(session, url) for url in urls])
 
         print(f'requests: {self.counter_request_ok}/{self.counter_request}')
         print('errors:', self.counter_error)
-        print('new:', await self.db_get_products_length() - self.db_products_lenght)
+        print('saved:', await self.db_get_products_length() - self.db_products_lenght)
 
         await self.db_close()
 
